@@ -1,0 +1,83 @@
+package datastructures.worklists;
+
+import cse332.exceptions.NotYetImplementedException;
+import cse332.interfaces.worklists.LIFOWorkList;
+
+import java.util.NoSuchElementException;
+
+/**
+ * See cse332/interfaces/worklists/LIFOWorkList.java
+ * for method specifications.
+ */
+public class ArrayStack<E> extends LIFOWorkList<E> {
+    E[] arr;
+    int track;
+
+    public ArrayStack() {
+        arr = (E[])new Object[10];
+        track = 0;
+    }
+
+    @Override
+    public void add(E work) {
+        if(isFull()) {
+            arr = resize();
+        }
+        arr[track] = work;
+        track++;
+    }
+
+    private boolean isFull() {
+        return arr[arr.length-1] != null;
+    }
+
+    private boolean isEmpty() {
+        return arr[0] == null;
+    }
+
+    private E[] resize() {
+        int size =arr.length*2;
+        E[] temp = (E[])new Object[size];
+
+        for(int i=0; i<arr.length; i++) {
+            temp[i] = arr[i];
+        }
+
+        return temp;
+    }
+
+    @Override
+    public E peek() {
+        return arr[track-1];
+    }
+
+    @Override
+    public E next() {
+        E temp;
+
+        if(!isEmpty()) {
+            temp = arr[track-1];
+            arr[track-1] = null;
+            track--;
+        } else {
+            throw new NoSuchElementException();
+        }
+
+        return temp;
+    }
+
+    @Override
+    public int size() {
+        return track;
+    }
+
+    @Override
+    public void clear() {
+        arr[0] = null;
+        track = 0;
+    }
+
+    public boolean hasWork() {
+        return arr[0] != null;
+    }
+}
